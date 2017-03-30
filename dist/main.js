@@ -1,56 +1,60 @@
-import {Meteor} from './meteor-import';
-
-import meteorCallWithPromise from './meteor-call-with-promise';
-export interface OneOrNoArgFunc<T, TResult> {
-  (arg?: T): TResult | void;
-}
-
-const allMethods: { [name: string]: Method<any, any>; } = {};
-export { allMethods };
-
-export abstract class AbstractMethod<T, TResult> {
-  hasArgs: boolean;
-  name: string;
-  methodToRun: (data?: T) => TResult;
-  meteorCall: any;
-
-  constructor(name: string, methodToRun: (data?: T) => TResult) {
-    this.name = name;
-    this.methodToRun = methodToRun;
-
-    Meteor.methods({
-      [this.name]: methodToRun
-    });
-    allMethods[this.name] = this;
-  }
-
-  call(_data?: T): Promise<TResult> {
-    return _data === undefined
-      ? meteorCallWithPromise(this.name)
-      : meteorCallWithPromise(this.name, _data);
-  }
-}
-
-export class MethodWithoutArgs<TResult> extends AbstractMethod<void, TResult> {
-  constructor(name: string, methodToRun: () => TResult) {
-    super(name,  methodToRun);
-  }
-
-  call() {
-    return super.call();
-  }
-}
-
-export default class Method<T, TResult> extends AbstractMethod<T, TResult> {
-  constructor(name: string, methodToRun: (data: T) => TResult) {
-    super(name,  methodToRun);
-  }
-
-  call(_data: T) {
-    return super.call(_data);
-  };
-}
-
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var meteor_import_1 = require("./meteor-import");
+var meteor_call_with_promise_1 = require("./meteor-call-with-promise");
+var allMethods = {};
+exports.allMethods = allMethods;
+var AbstractMethod = (function () {
+    function AbstractMethod(name, methodToRun) {
+        this.name = name;
+        this.methodToRun = methodToRun;
+        meteor_import_1.Meteor.methods((_a = {},
+            _a[this.name] = methodToRun,
+            _a));
+        allMethods[this.name] = this;
+        var _a;
+    }
+    AbstractMethod.prototype.call = function (_data) {
+        return _data === undefined
+            ? meteor_call_with_promise_1.default(this.name)
+            : meteor_call_with_promise_1.default(this.name, _data);
+    };
+    return AbstractMethod;
+}());
+exports.AbstractMethod = AbstractMethod;
+var MethodWithoutArgs = (function (_super) {
+    __extends(MethodWithoutArgs, _super);
+    function MethodWithoutArgs(name, methodToRun) {
+        return _super.call(this, name, methodToRun) || this;
+    }
+    MethodWithoutArgs.prototype.call = function () {
+        return _super.prototype.call.call(this);
+    };
+    return MethodWithoutArgs;
+}(AbstractMethod));
+exports.MethodWithoutArgs = MethodWithoutArgs;
+var Method = (function (_super) {
+    __extends(Method, _super);
+    function Method(name, methodToRun) {
+        return _super.call(this, name, methodToRun) || this;
+    }
+    Method.prototype.call = function (_data) {
+        return _super.prototype.call.call(this, _data);
+    };
+    ;
+    return Method;
+}(AbstractMethod));
+exports.default = Method;
 //
 // export class Foo<T, TResult> {
 //   name: string;
@@ -141,3 +145,4 @@ export default class Method<T, TResult> extends AbstractMethod<T, TResult> {
 //   await new Method<undefined, number>('', function () { return 2; }).call()
 //   await new Method('', function () { return 2; }).call(2)
 // }
+//# sourceMappingURL=main.js.map

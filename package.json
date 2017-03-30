@@ -1,0 +1,23 @@
+{
+  "name": "meteor-method",
+  "version": "0.0.1",
+  "description": "Meteor Methods (with TypeScript definitions)",
+  "repository": "nathantreid/meteor-method",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Nathan Reid",
+  "license": "ISC",
+  "dependencies": {
+    "meteor-globals": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/meteor": "^1.4.1",
+    "@types/core-js": "^0.9.39",
+    "core-js": "^2.4.1",
+    "typescript": "^2.2.1"
+  }
+}
