@@ -1,6 +1,6 @@
 {
   "name": "meteor-method",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Meteor Methods (with TypeScript definitions)",
   "repository": "nathantreid/meteor-method",
   "main": "dist/main.js",

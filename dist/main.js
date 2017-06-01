@@ -15,9 +15,10 @@ var meteor_call_with_promise_1 = require("./meteor-call-with-promise");
 var allMethods = {};
 exports.allMethods = allMethods;
 var AbstractMethod = (function () {
-    function AbstractMethod(name, methodToRun) {
+    function AbstractMethod(name, methodToRun, simulateOnClient) {
+        if (simulateOnClient === void 0) { simulateOnClient = false; }
         this.name = name;
-        this.methodToRun = methodToRun;
+        this.methodToRun = simulateOnClient ? methodToRun : this.makeServerOnly(methodToRun);
         meteor_import_1.Meteor.methods((_a = {},
             _a[this.name] = methodToRun,
             _a));
@@ -29,13 +30,22 @@ var AbstractMethod = (function () {
             ? meteor_call_with_promise_1.default(this.name)
             : meteor_call_with_promise_1.default(this.name, _data);
     };
+    AbstractMethod.prototype.makeServerOnly = function (method) {
+        return function (data) {
+            if (!meteor_import_1.Meteor.isServer) {
+                return undefined;
+            }
+            return method(data);
+        };
+    };
     return AbstractMethod;
 }());
 exports.AbstractMethod = AbstractMethod;
 var MethodWithoutArgs = (function (_super) {
     __extends(MethodWithoutArgs, _super);
-    function MethodWithoutArgs(name, methodToRun) {
-        return _super.call(this, name, methodToRun) || this;
+    function MethodWithoutArgs(name, methodToRun, simulateOnClient) {
+        if (simulateOnClient === void 0) { simulateOnClient = false; }
+        return _super.call(this, name, methodToRun, simulateOnClient) || this;
     }
     MethodWithoutArgs.prototype.call = function () {
         return _super.prototype.call.call(this);
@@ -45,8 +55,9 @@ var MethodWithoutArgs = (function (_super) {
 exports.MethodWithoutArgs = MethodWithoutArgs;
 var Method = (function (_super) {
     __extends(Method, _super);
-    function Method(name, methodToRun) {
-        return _super.call(this, name, methodToRun) || this;
+    function Method(name, methodToRun, simulateOnClient) {
+        if (simulateOnClient === void 0) { simulateOnClient = false; }
+        return _super.call(this, name, methodToRun, simulateOnClient) || this;
     }
     Method.prototype.call = function (_data) {
         return _super.prototype.call.call(this, _data);

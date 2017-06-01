@@ -10,14 +10,15 @@ export declare abstract class AbstractMethod<T, TResult> {
     name: string;
     methodToRun: (data?: T) => TResult;
     meteorCall: any;
-    constructor(name: string, methodToRun: (data?: T) => TResult);
+    constructor(name: string, methodToRun: (data?: T) => TResult, simulateOnClient?: boolean);
     call(_data?: T): Promise<TResult>;
+    private makeServerOnly(method);
 }
 export declare class MethodWithoutArgs<TResult> extends AbstractMethod<void, TResult> {
-    constructor(name: string, methodToRun: () => TResult);
+    constructor(name: string, methodToRun: () => TResult, simulateOnClient?: boolean);
     call(): Promise<TResult>;
 }
 export default class Method<T, TResult> extends AbstractMethod<T, TResult> {
-    constructor(name: string, methodToRun: (data: T) => TResult);
+    constructor(name: string, methodToRun: (data: T) => TResult, simulateOnClient?: boolean);
     call(_data: T): Promise<TResult>;
 }
