@@ -14,9 +14,9 @@ export abstract class AbstractMethod<T, TResult> {
   methodToRun: (data?: T) => TResult;
   meteorCall: any;
 
-  constructor(name: string, methodToRun: (data?: T) => TResult) {
+  constructor(name: string, methodToRun: (data?: T) => TResult, simulateOnClient = false) {
     this.name = name;
-    this.methodToRun = methodToRun;
+    this.methodToRun = simulateOnClient ? methodToRun : this.makeServerOnly(methodToRun);
 
     Meteor.methods({
       [this.name]: methodToRun
@@ -29,11 +29,20 @@ export abstract class AbstractMethod<T, TResult> {
       ? meteorCallWithPromise(this.name)
       : meteorCallWithPromise(this.name, _data);
   }
+
+  private makeServerOnly(method: (data?: T) => TResult) {
+    return function(data?: T): TResult {
+      if (!Meteor.isServer) {
+        return undefined as any as TResult;
+      }
+      return method(data);
+    }
+  }
 }
 
 export class MethodWithoutArgs<TResult> extends AbstractMethod<void, TResult> {
-  constructor(name: string, methodToRun: () => TResult) {
-    super(name,  methodToRun);
+  constructor(name: string, methodToRun: () => TResult, simulateOnClient = false) {
+    super(name,  methodToRun, simulateOnClient);
   }
 
   call() {
@@ -42,8 +51,8 @@ export class MethodWithoutArgs<TResult> extends AbstractMethod<void, TResult> {
 }
 
 export default class Method<T, TResult> extends AbstractMethod<T, TResult> {
-  constructor(name: string, methodToRun: (data: T) => TResult) {
-    super(name,  methodToRun);
+  constructor(name: string, methodToRun: (data: T) => TResult, simulateOnClient = false) {
+    super(name,  methodToRun, simulateOnClient);
   }
 
   call(_data: T) {
