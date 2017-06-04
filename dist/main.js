@@ -20,7 +20,7 @@ var AbstractMethod = (function () {
         this.name = name;
         this.methodToRun = simulateOnClient ? methodToRun : this.makeServerOnly(methodToRun);
         meteor_import_1.Meteor.methods((_a = {},
-            _a[this.name] = methodToRun,
+            _a[this.name] = this.methodToRun,
             _a));
         allMethods[this.name] = this;
         var _a;
