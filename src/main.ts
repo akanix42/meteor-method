@@ -19,7 +19,7 @@ export abstract class AbstractMethod<T, TResult> {
     this.methodToRun = simulateOnClient ? methodToRun : this.makeServerOnly(methodToRun);
 
     Meteor.methods({
-      [this.name]: methodToRun
+      [this.name]: this.methodToRun
     });
     allMethods[this.name] = this;
   }
