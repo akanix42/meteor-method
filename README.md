@@ -1,5 +1,5 @@
 # Installation
-`meteor npm i --save meteor-method'
+`meteor npm i --save meteor-method`
 
 # Usage
 
