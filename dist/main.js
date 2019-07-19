@@ -14,8 +14,9 @@ var meteor_import_1 = require("./meteor-import");
 var meteor_call_with_promise_1 = require("./meteor-call-with-promise");
 var allMethods = {};
 exports.allMethods = allMethods;
-var AbstractMethod = (function () {
+var AbstractMethod = /** @class */ (function () {
     function AbstractMethod(name, methodToRun, simulateOnClient) {
+        var _a;
         if (simulateOnClient === void 0) { simulateOnClient = false; }
         this.name = name;
         this.methodToRun = simulateOnClient ? methodToRun : this.makeServerOnly(methodToRun);
@@ -23,7 +24,6 @@ var AbstractMethod = (function () {
             _a[this.name] = this.methodToRun,
             _a));
         allMethods[this.name] = this;
-        var _a;
     }
     AbstractMethod.prototype.call = function (_data) {
         return _data === undefined
@@ -41,7 +41,7 @@ var AbstractMethod = (function () {
     return AbstractMethod;
 }());
 exports.AbstractMethod = AbstractMethod;
-var MethodWithoutArgs = (function (_super) {
+var MethodWithoutArgs = /** @class */ (function (_super) {
     __extends(MethodWithoutArgs, _super);
     function MethodWithoutArgs(name, methodToRun, simulateOnClient) {
         if (simulateOnClient === void 0) { simulateOnClient = false; }
@@ -53,7 +53,7 @@ var MethodWithoutArgs = (function (_super) {
     return MethodWithoutArgs;
 }(AbstractMethod));
 exports.MethodWithoutArgs = MethodWithoutArgs;
-var Method = (function (_super) {
+var Method = /** @class */ (function (_super) {
     __extends(Method, _super);
     function Method(name, methodToRun, simulateOnClient) {
         if (simulateOnClient === void 0) { simulateOnClient = false; }
